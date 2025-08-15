@@ -6,3 +6,8 @@
   font-size: large;
   color: grey;
 }
+#categoryFilter,
+#priceRangeSelect,
+#sortBy {
+  font-weight: bold;
+}

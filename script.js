@@ -126,14 +126,11 @@ document.getElementById("applyPromo").addEventListener("click", () => {
   renderCart();
 });
 
-document
-  .getElementById("categoryFilter")
-  .addEventListener("change", filterProducts);
-document.getElementById("priceRange").addEventListener("input", filterProducts);
-document.getElementById("sortBy").addEventListener("change", sortProducts);
-
-function filterProducts() {
+function applyFiltersAndSort() {
+  const category = document.getElementById("categoryFilter").value;
   const priceValue = document.getElementById("priceRangeSelect").value;
+  const sortBy = document.getElementById("sortBy").value;
+
   let filtered = products.filter((p) => {
     let priceMatch = true;
     if (priceValue) {
@@ -147,14 +144,22 @@ function filterProducts() {
     }
     return (category === "" || p.category === category) && priceMatch;
   });
+
+  if (sortBy === "price-asc") filtered.sort((a, b) => a.price - b.price);
+  if (sortBy === "price-desc") filtered.sort((a, b) => b.price - a.price);
+  if (sortBy === "popularity-desc")
+    filtered.sort((a, b) => b.popularity - a.popularity);
+
+  renderProducts(filtered);
 }
 
-function sortProducts() {
-  const sortBy = document.getElementById("sortBy").value;
-  let sorted = [...products];
-  if (sortBy === "price-asc") sorted.sort((a, b) => a.price - b.price);
-  if (sortBy === "price-desc") sorted.sort((a, b) => b.price - a.price);
-  if (sortBy === "popularity-desc")
-    sorted.sort((a, b) => b.popularity - a.popularity);
-  renderProducts(sorted);
-}
+// ✅ Correct event bindings
+document
+  .getElementById("categoryFilter")
+  .addEventListener("change", applyFiltersAndSort);
+document
+  .getElementById("priceRangeSelect")
+  .addEventListener("change", applyFiltersAndSort);
+document
+  .getElementById("sortBy")
+  .addEventListener("change", applyFiltersAndSort);
